@@ -15,10 +15,24 @@
     <ClInclude Include="src\MainWindow.h">
       <Filter>headers</Filter>
     </ClInclude>
+    <ClInclude Include="src\resource.h">
+      <Filter>headers</Filter>
+    </ClInclude>
+    <ClInclude Include="src\CameraControlsBar.h">
+      <Filter>headers</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\MainWindow.cpp">
       <Filter>source files</Filter>
     </ClCompile>
+    <ClCompile Include="src\CameraControlsBar.cpp">
+      <Filter>source files</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="src\Billiards.rc">
+      <Filter>resources</Filter>
+    </ResourceCompile>
   </ItemGroup>
 </Project>

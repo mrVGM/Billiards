@@ -144,10 +144,16 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="src\CameraControlsBar.h" />
     <ClInclude Include="src\MainWindow.h" />
+    <ClInclude Include="src\resource.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="src\CameraControlsBar.cpp" />
     <ClCompile Include="src\MainWindow.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="src\Billiards.rc" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
