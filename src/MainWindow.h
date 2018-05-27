@@ -10,6 +10,7 @@ private:
 public:
 	MainWindow();
 	void initControls();
+	void setUpOpenGLContext();
 	~MainWindow();
 };
 
