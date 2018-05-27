@@ -21,12 +21,21 @@
     <ClInclude Include="src\CameraControlsBar.h">
       <Filter>headers</Filter>
     </ClInclude>
+    <ClInclude Include="src\Config.h">
+      <Filter>headers</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Renderer.h">
+      <Filter>headers</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\MainWindow.cpp">
       <Filter>source files</Filter>
     </ClCompile>
     <ClCompile Include="src\CameraControlsBar.cpp">
+      <Filter>source files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Renderer.cpp">
       <Filter>source files</Filter>
     </ClCompile>
   </ItemGroup>

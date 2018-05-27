@@ -14,30 +14,14 @@ BOOL App::InitInstance()
 	mainWindow->Create(NULL, "Billiards");
 	mainWindow->ShowWindow(SW_SHOW);
 
-	mainWindow->setUpOpenGLContext();
-
 	mainWindow->initControls();
+
+	mainWindow->startRendering();
 
 	return TRUE;
 }
 
-MainWindow::MainWindow()
-{
-	cameraControlsBar = new CameraControlsBar();
-}
-
-MainWindow::~MainWindow()
-{
-	delete cameraControlsBar;
-}
-
-void MainWindow::initControls()
-{
-	cameraControlsBar->Create(IDD_DIALOGBAR, this);
-	cameraControlsBar->ShowWindow(SW_SHOW);
-}
-
-void MainWindow::setUpOpenGLContext()
+void MainWindow::render()
 {
 	CDC * dc = GetDC();
 
@@ -64,7 +48,7 @@ void MainWindow::setUpOpenGLContext()
 	CRect rect;
 	GetWindowRect(&rect);
 
-	HDC hdc = (HDC)*dc;
+	hdc = (HDC)*dc;
 
 	int pf = ChoosePixelFormat(hdc, &pfd);
 	SetPixelFormat(hdc, pf, &pfd);
@@ -73,4 +57,52 @@ void MainWindow::setUpOpenGLContext()
 	wglMakeCurrent(hdc, context);
 
 	GLenum res = glewInit();
+
+	renderer.setupGPUProgram();
+	renderer.setUpGPUData();
+
+	while (rendering)
+	{
+		renderer.render(hdc);
+		Sleep(25);
+	}
+}
+
+MainWindow::MainWindow() : renderThread(NULL)
+{
+}
+
+void MainWindow::initControls()
+{
+	cameraControlsBar.Create(IDD_DIALOGBAR, this);
+	cameraControlsBar.ShowWindow(SW_SHOW);
+}
+
+static void worker()
+{
+	app.mainWindow->render();
+}
+
+void MainWindow::startRendering()
+{
+	if (renderThread)
+		return;
+
+	rendering = true;
+	renderThread = new std::thread(worker);
+}
+
+void MainWindow::stopRendering()
+{
+	if (!renderThread)
+		return;
+	rendering = false;
+	renderThread->join();
+	delete renderThread;
+	renderThread = NULL;
+}
+
+MainWindow::~MainWindow()
+{
+	stopRendering();
 }

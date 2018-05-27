@@ -1,23 +1,32 @@
 #pragma once
 
 #include <afxwin.h>
+#include <thread>
+
 #include "CameraControlsBar.h"
+#include "Renderer.h"
 
 class MainWindow : public CFrameWnd
 {
 private:
-	CameraControlsBar * cameraControlsBar;
+	CameraControlsBar cameraControlsBar;
+	Renderer renderer;
+	bool rendering;
+	std::thread * renderThread;
+	friend void worker();
+	void render();
 public:
+	HDC hdc;
 	MainWindow();
 	void initControls();
-	void setUpOpenGLContext();
+	void startRendering();
+	void stopRendering();
 	~MainWindow();
 };
 
 class App : public CWinApp
 {
-private:
-	MainWindow * mainWindow;
 public:
+	MainWindow * mainWindow;
 	BOOL InitInstance() override;
 };
