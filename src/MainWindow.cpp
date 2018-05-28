@@ -32,6 +32,8 @@ void MainWindow::initControls()
 
 	renderWindow.Create(0, "", WS_CHILD | WS_VISIBLE, CRect(0,rectControlsBar.Height(),rectWindow.Width(),rectWindow.Height()), this, 0);
 
+	renderWindow.renderer.setDimensions(rectWindow.Width(), rectWindow.Height() - rectControlsBar.Height());
+
 	renderWindow.startRendering();
 }
 

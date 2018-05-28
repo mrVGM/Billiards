@@ -6,13 +6,13 @@
 
 class RenderWindow : public CWnd
 {
-	Renderer renderer;
 	bool rendering;
 	std::thread * renderThread;
 	friend void worker();
 	void render();
 public:
 	HDC hdc;
+	Renderer renderer;
 	RenderWindow();
 	void startRendering();
 	void stopRendering();

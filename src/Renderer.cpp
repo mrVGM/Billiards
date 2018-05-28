@@ -9,6 +9,8 @@
 
 #include <GL\glew.h>
 
+#include <gtc\constants.hpp>
+
 Renderer::Renderer()
 {
 	std::string inputFilesDir(INPUT_FILES_DIR);
@@ -17,6 +19,8 @@ Renderer::Renderer()
 
 	readFile(vertexShaderPath.c_str(), vertexShader);
 	readFile(fragmentShaderPath.c_str(), fragmentShader);
+	
+	setCamPosition(glm::vec3(-10, -10, 10));
 }
 
 void Renderer::readFile(const char * fileName, std::string & dest)
@@ -45,7 +49,7 @@ void Renderer::setupGPUProgram()
 	glDeleteShader(fs);
 
 	glUseProgram(program);
-
+	glProgram = program;
 }
 
 void Renderer::setUpGPUData()
@@ -78,6 +82,7 @@ void Renderer::setUpGPUData()
 void Renderer::render(HDC hdc)
 {
 	glClear(GL_COLOR_BUFFER_BIT);
+	setUniforms();
 	glDrawElements(GL_TRIANGLES, 3, GL_UNSIGNED_INT, 0);
 	BOOL res = SwapBuffers(hdc);
 }
@@ -117,4 +122,65 @@ int Renderer::compileShader(int type, std::string & error)
 	{
 		error = "Unknown error";
 	}
+}
+
+void Renderer::setDimensions(int width, int height)
+{
+	xScale = tan(glm::pi<float>() / 4.0f);
+	yScale = height * xScale / width;
+}
+
+void Renderer::setCamPosition(const glm::vec3 & position)
+{
+	camPosition = position;
+
+	glm::vec3 right = glm::normalize(glm::cross(glm::vec3(0.0, 0.0, 1.0), position));
+	glm::vec3 dir = glm::normalize(-position);
+	glm::vec3 up = glm::cross(right, dir);
+
+	glm::mat3 tr;
+
+	tr[0][0] = right.x;
+	tr[1][0] = right.y;
+	tr[2][0] = right.z;
+
+	tr[0][1] = dir.x;
+	tr[1][1] = dir.y;
+	tr[2][1] = dir.z;
+
+	tr[0][2] = up.x;
+	tr[1][2] = up.y;
+	tr[2][2] = up.z;
+
+	tr = glm::inverse(tr);
+
+	transform[0] = tr[0][0];
+	transform[1] = tr[0][1];
+	transform[2] = tr[0][2];
+
+	transform[3] = tr[1][0];
+	transform[4] = tr[1][1];
+	transform[5] = tr[1][2];
+
+	transform[6] = tr[2][0];
+	transform[7] = tr[2][1];
+	transform[8] = tr[2][2];
+
+	changed = true;
+}
+
+void Renderer::setUniforms()
+{
+	if (!changed)
+		return;
+
+	int CAM = glGetUniformLocation(glProgram, "CAM");
+	int TR = glGetUniformLocation(glProgram, "TR");
+	int AXES = glGetUniformLocation(glProgram, "AXES");
+
+	glUniform3f(CAM, camPosition.x, camPosition.y, camPosition.z);
+	glUniformMatrix3fv(TR, 1, GL_TRUE, transform);
+	glUniform2f(AXES, xScale, yScale);
+
+	changed = false;
 }
