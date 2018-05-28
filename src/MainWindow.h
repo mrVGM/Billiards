@@ -5,6 +5,7 @@
 
 #include "CameraControlsBar.h"
 #include "Renderer.h"
+#include "RenderWindow.h"
 
 class MainWindow : public CFrameWnd
 {
@@ -13,15 +14,9 @@ private:
 	Renderer renderer;
 	bool rendering;
 	std::thread * renderThread;
-	friend void worker();
-	void render();
 public:
-	HDC hdc;
-	MainWindow();
+	RenderWindow renderWindow;
 	void initControls();
-	void startRendering();
-	void stopRendering();
-	~MainWindow();
 };
 
 class App : public CWinApp
@@ -29,4 +24,5 @@ class App : public CWinApp
 public:
 	MainWindow * mainWindow;
 	BOOL InitInstance() override;
+	static App & getApp();
 };

@@ -186,12 +186,14 @@ COPY $(SolutionDir)src\fragment.shader $(SolutionDir)final\res</Command>
     <ClInclude Include="src\Config.h" />
     <ClInclude Include="src\MainWindow.h" />
     <ClInclude Include="src\Renderer.h" />
+    <ClInclude Include="src\RenderWindow.h" />
     <ClInclude Include="src\resource.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\CameraControlsBar.cpp" />
     <ClCompile Include="src\MainWindow.cpp" />
     <ClCompile Include="src\Renderer.cpp" />
+    <ClCompile Include="src\RenderWindow.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="src\Billiards.rc" />
