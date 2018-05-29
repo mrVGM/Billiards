@@ -155,7 +155,9 @@
 MKDIR $(SolutionDir)final\res
 COPY $(SolutionDir)build\Release\$(TargetFileName) $(SolutionDir)final
 COPY $(SolutionDir)src\vertex.shader $(SolutionDir)final\res
-COPY $(SolutionDir)src\fragment.shader $(SolutionDir)final\res</Command>
+COPY $(SolutionDir)src\fragment.shader $(SolutionDir)final\res
+COPY $(SolutionDir)src\table.obj $(SolutionDir)final\res\table.obj
+COPY $(SolutionDir)src\ball.obj $(SolutionDir)final\res\ball.obj</Command>
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
@@ -182,7 +184,9 @@ COPY $(SolutionDir)src\fragment.shader $(SolutionDir)final\res</Command>
 MKDIR $(SolutionDir)final\res
 COPY $(SolutionDir)build\Release\$(TargetFileName) $(SolutionDir)final
 COPY $(SolutionDir)src\vertex.shader $(SolutionDir)final\res
-COPY $(SolutionDir)src\fragment.shader $(SolutionDir)final\res</Command>
+COPY $(SolutionDir)src\fragment.shader $(SolutionDir)final\res
+COPY $(SolutionDir)src\table.obj $(SolutionDir)final\res\table.obj
+COPY $(SolutionDir)src\ball.obj $(SolutionDir)final\res\ball.obj</Command>
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemGroup>
