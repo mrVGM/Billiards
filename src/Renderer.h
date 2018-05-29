@@ -5,6 +5,22 @@
 
 #include <glm.hpp>
 
+#include <vector>
+
+struct Vertex
+{
+	float position[3];
+	float normal[3];
+	float id;
+};
+
+struct Model
+{
+	std::vector<Vertex> vertices;
+	std::vector<unsigned int> indeces;
+	void read(const char * fileName);
+};
+
 class Renderer
 {
 private:
@@ -24,6 +40,8 @@ private:
 	int glProgram;
 
 	void setUniforms();
+
+	int renderElements;
 	
 public:
 	Renderer();

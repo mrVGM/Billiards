@@ -4,6 +4,7 @@
 
 #include <fstream>
 #include <thread>
+#include <sstream>
 
 #include <GL\glew.h>
 
@@ -52,6 +53,12 @@ void Renderer::setupGPUProgram()
 
 void Renderer::setUpGPUData()
 {
+	Model table;
+
+	std::string tableOBJ(INPUT_FILES_DIR);
+	tableOBJ += "table.obj";
+	table.read(tableOBJ.c_str());
+
 	float pts[] =
 	{
 		-0.5, -0.5,
@@ -68,20 +75,29 @@ void Renderer::setUpGPUData()
 	glGenBuffers(2, bufferId);
 
 	glBindBuffer(GL_ARRAY_BUFFER, bufferId[0]);
-	glBufferData(GL_ARRAY_BUFFER, 3 * 2 * sizeof(float), pts, GL_STATIC_DRAW);
+	glBufferData(GL_ARRAY_BUFFER, table.vertices.size() * sizeof(Vertex), &table.vertices[0], GL_STATIC_DRAW);
 
 	glEnableVertexAttribArray(0);
-	glVertexAttribPointer(0, 2, GL_FLOAT, GL_FALSE, 2 * sizeof(float), 0);
+	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, sizeof(Vertex), 0);
+
+	glEnableVertexAttribArray(1);
+	glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, sizeof(Vertex), (const void *)(3 * sizeof(float)));
+
+	glEnableVertexAttribArray(2);
+	glVertexAttribPointer(2, 1, GL_FLOAT, GL_FALSE, sizeof(Vertex), (const void *)(6 * sizeof(float)));
 
 	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, bufferId[1]);
-	glBufferData(GL_ELEMENT_ARRAY_BUFFER, 3 * sizeof(unsigned int), indeces, GL_STATIC_DRAW);
+	glBufferData(GL_ELEMENT_ARRAY_BUFFER, table.indeces.size() * sizeof(unsigned int), &table.indeces[0], GL_STATIC_DRAW);
+
+	renderElements = table.indeces.size();
 }
 
 void Renderer::render(HDC hdc)
 {
 	glClear(GL_COLOR_BUFFER_BIT);
+	glClear(GL_DEPTH_BUFFER_BIT);
 	setUniforms();
-	glDrawElements(GL_TRIANGLES, 3, GL_UNSIGNED_INT, 0);
+	glDrawElements(GL_TRIANGLES, renderElements, GL_UNSIGNED_INT, 0);
 	BOOL res = SwapBuffers(hdc);
 }
 
@@ -181,4 +197,65 @@ void Renderer::setUniforms()
 	glUniform2f(AXES, xScale, yScale);
 
 	changed = false;
+}
+
+void Model::read(const char * fileName)
+{
+	using namespace std;
+	ifstream file(fileName);
+
+	int v = 0, n = 0;
+
+	string line;
+	stringstream ss;
+	while (getline(file, line))
+	{
+		ss.str(line);
+		ss.clear();
+		
+		string type;
+		ss >> type;
+
+		if (type == "v")
+		{
+			if (v == vertices.size())
+				vertices.push_back(Vertex());
+
+			ss >> vertices[v].position[0] >> vertices[v].position[1] >> vertices[v].position[2];
+			++v;
+		}
+		else if (type == "vn")
+		{
+			if (n == vertices.size())
+				vertices.push_back(Vertex());
+
+			ss >> vertices[n].normal[0] >> vertices[n].normal[1] >> vertices[n].normal[2];
+			++n;
+		}
+		else if (type == "f")
+		{
+			unsigned int i;
+
+			string ind1, ind2, ind3;
+			ss >> ind1 >> ind2 >> ind3;
+
+			ss.str(ind1);
+			ss.clear();
+
+			ss >> i;
+			indeces.push_back(i-1);
+
+			ss.str(ind2);
+			ss.clear();
+
+			ss >> i;
+			indeces.push_back(i-1);
+
+			ss.str(ind3);
+			ss.clear();
+
+			ss >> i;
+			indeces.push_back(i-1);
+		}
+	}
 }

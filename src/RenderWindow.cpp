@@ -73,6 +73,9 @@ void RenderWindow::render()
 
 	GLenum res = glewInit();
 
+	glEnable(GL_DEPTH_TEST);
+	glDepthFunc(GL_LEQUAL);
+
 	renderer.setupGPUProgram();
 	renderer.setUpGPUData();
 
