@@ -9,6 +9,7 @@
 
 struct Vertex
 {
+	Vertex(float model) : id(model) {}
 	float position[3];
 	float normal[3];
 	float id;
@@ -16,9 +17,12 @@ struct Vertex
 
 struct Model
 {
+	Model(int id) : modelId(id) {}
+	int modelId;
 	std::vector<Vertex> vertices;
 	std::vector<unsigned int> indeces;
 	void read(const char * fileName);
+	void add(const Model & other);
 };
 
 class Renderer

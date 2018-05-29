@@ -53,23 +53,19 @@ void Renderer::setupGPUProgram()
 
 void Renderer::setUpGPUData()
 {
-	Model table;
-
+	Model table(0);
 	std::string tableOBJ(INPUT_FILES_DIR);
-	tableOBJ += "ball.obj";
+	tableOBJ += "table.obj";
+
 	table.read(tableOBJ.c_str());
 
-	float pts[] =
-	{
-		-0.5, -0.5,
-		+0.5, -0.5,
-		+0.0, +0.5
-	};
+	Model ball(1);
+	std::string ballOBJ(INPUT_FILES_DIR);
+	ballOBJ += "ball.obj";
 
-	unsigned int indeces[] =
-	{
-		0,1,2
-	};
+	ball.read(ballOBJ.c_str());
+
+	table.add(ball);
 
 	unsigned int bufferId[2];
 	glGenBuffers(2, bufferId);
@@ -219,7 +215,7 @@ void Model::read(const char * fileName)
 		if (type == "v")
 		{
 			if (v == vertices.size())
-				vertices.push_back(Vertex());
+				vertices.push_back(Vertex(modelId));
 
 			ss >> vertices[v].position[0] >> vertices[v].position[1] >> vertices[v].position[2];
 			++v;
@@ -227,7 +223,7 @@ void Model::read(const char * fileName)
 		else if (type == "vn")
 		{
 			if (n == vertices.size())
-				vertices.push_back(Vertex());
+				vertices.push_back(Vertex(modelId));
 
 			ss >> vertices[n].normal[0] >> vertices[n].normal[1] >> vertices[n].normal[2];
 			++n;
@@ -268,4 +264,12 @@ void Model::read(const char * fileName)
 			}
 		}
 	}
+}
+
+void Model::add(const Model & other)
+{
+	const int n = vertices.size();
+	vertices.insert(vertices.end(), other.vertices.begin(), other.vertices.end());
+	for (int i = 0; i < other.indeces.size(); ++i)
+		indeces.push_back(n + other.indeces[i]);
 }
