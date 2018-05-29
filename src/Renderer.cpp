@@ -56,7 +56,7 @@ void Renderer::setUpGPUData()
 	Model table;
 
 	std::string tableOBJ(INPUT_FILES_DIR);
-	tableOBJ += "table.obj";
+	tableOBJ += "ball.obj";
 	table.read(tableOBJ.c_str());
 
 	float pts[] =
@@ -234,28 +234,38 @@ void Model::read(const char * fileName)
 		}
 		else if (type == "f")
 		{
-			unsigned int i;
-
-			string ind1, ind2, ind3;
-			ss >> ind1 >> ind2 >> ind3;
+			string ind1, ind2, ind3, ind4;
+			unsigned int i1, i2, i3, i4;
+			ss >> ind1 >> ind2 >> ind3 >> ind4;
 
 			ss.str(ind1);
 			ss.clear();
 
-			ss >> i;
-			indeces.push_back(i-1);
+			ss >> i1;
+			indeces.push_back(i1-1);
 
 			ss.str(ind2);
 			ss.clear();
 
-			ss >> i;
-			indeces.push_back(i-1);
+			ss >> i2;
+			indeces.push_back(i2-1);
 
 			ss.str(ind3);
 			ss.clear();
 
-			ss >> i;
-			indeces.push_back(i-1);
+			ss >> i3;
+			indeces.push_back(i3-1);
+
+			if (ind4 != "")
+			{
+				ss.str(ind4);
+				ss.clear();
+
+				ss >> i4;
+				indeces.push_back(i1 - 1);
+				indeces.push_back(i3 - 1);
+				indeces.push_back(i4 - 1);
+			}
 		}
 	}
 }
