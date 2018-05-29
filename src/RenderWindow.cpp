@@ -1,5 +1,6 @@
+#include "stdafx.h"
+
 #include "RenderWindow.h"
-#include "MainWindow.h"
 #include "GL/glew.h"
 
 RenderWindow::RenderWindow() : renderThread(NULL)

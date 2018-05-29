@@ -15,8 +15,7 @@ public:
 	BOOL OnInitDialog() override;
 	
 	void OnChangeCaption();
-	void OnParallelChanged();
-    void OnMeridianChanged();
+	void OnHScroll(UINT nSBCode, UINT nPos, CScrollBar* pScrollBar);
 
 	void updateCamPosition();
 

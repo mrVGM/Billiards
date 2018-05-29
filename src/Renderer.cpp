@@ -1,11 +1,9 @@
+#include "stdafx.h"
+
 #include "Renderer.h"
-#include "Config.h"
-#include "MainWindow.h"
 
 #include <fstream>
 #include <thread>
-
-#include <afxwin.h>
 
 #include <GL\glew.h>
 

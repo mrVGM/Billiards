@@ -1,9 +1,6 @@
+#include "stdafx.h"
+
 #include "CameraControlsBar.h"
-#include "MainWindow.h"
-
-#include<afxcmn.h>
-
-#include "resource.h"
 
 #include "gtc\constants.hpp"
 
@@ -11,8 +8,7 @@
 
 BEGIN_MESSAGE_MAP(CameraControlsBar, CDialog)
 	ON_EN_CHANGE(IDC_EDIT1, OnChangeCaption)
-	ON_WM_HSCROLL(IDC_SLIDER1, OnParallelChanged)
-	ON_WM_HSCROLL(IDC_SLIDER2, OnMeridianChanged)
+	ON_WM_HSCROLL(OnHScroll)
 END_MESSAGE_MAP()
 
 CameraControlsBar::CameraControlsBar() : changed(false)
@@ -68,17 +64,14 @@ void CameraControlsBar::OnChangeCaption()
 	changed = true;
 }
 
-void CameraControlsBar::OnParallelChanged()
+void CameraControlsBar::OnHScroll(UINT nSBCode, UINT nPos, CScrollBar* pScrollBar)
 {
-	CSliderCtrl * slider1 = (CSliderCtrl *)(GetDlgItem(IDC_SLIDER1));
-	parallel = slider1->GetPos();
-	updateCamPosition();
-}
+	CSliderCtrl * slider = (CSliderCtrl *)pScrollBar;
+	if (pScrollBar->GetDlgCtrlID() == IDC_SLIDER1)
+		parallel = slider->GetPos();
+	else if (pScrollBar->GetDlgCtrlID() == IDC_SLIDER2)
+		meridian = slider->GetPos();
 
-void CameraControlsBar::OnMeridianChanged()
-{
-	CSliderCtrl * slider2 = (CSliderCtrl *)(GetDlgItem(IDC_SLIDER2));
-	meridian = slider2->GetPos();
 	updateCamPosition();
 }
 

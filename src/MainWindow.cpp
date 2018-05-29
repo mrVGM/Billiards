@@ -1,7 +1,6 @@
-#include "MainWindow.h"
-#include "CameraControlsBar.h"
+#include "stdafx.h"
 
-#include "resource.h"
+#include "CameraControlsBar.h"
 
 #include <GL/glew.h>
 

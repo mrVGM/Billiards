@@ -21,13 +21,13 @@
     <ClInclude Include="src\CameraControlsBar.h">
       <Filter>headers</Filter>
     </ClInclude>
-    <ClInclude Include="src\Config.h">
-      <Filter>headers</Filter>
-    </ClInclude>
     <ClInclude Include="src\Renderer.h">
       <Filter>headers</Filter>
     </ClInclude>
     <ClInclude Include="src\RenderWindow.h">
+      <Filter>headers</Filter>
+    </ClInclude>
+    <ClInclude Include="src\stdafx.h">
       <Filter>headers</Filter>
     </ClInclude>
   </ItemGroup>
