@@ -39,3 +39,18 @@ bool intersects(const glm::vec3 & point, const glm::vec3 & dir, const Segment & 
 
 	return true;
 }
+
+glm::vec3 reflect(const glm::vec3 & ray, const glm::vec3 & surf)
+{
+	glm::vec3 x = glm::normalize(surf);
+	glm::vec3 z(0,0,1);
+	glm::vec3 y = glm::cross(z, x);
+	
+	glm::mat3 tr(x, y, z);
+	glm::mat3 trInv = glm::inverse(tr);
+
+	glm::vec3 r = trInv * ray;
+	r.y = -r.y;
+
+	return tr * r;
+}

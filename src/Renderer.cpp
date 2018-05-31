@@ -10,6 +10,8 @@
 
 #include <gtc\constants.hpp>
 
+#include "PhysicsEngine.h"
+
 Renderer::Renderer()
 {
 	std::string inputFilesDir(INPUT_FILES_DIR);
@@ -92,6 +94,9 @@ void Renderer::render(HDC hdc)
 {
 	glClear(GL_COLOR_BUFFER_BIT);
 	glClear(GL_DEPTH_BUFFER_BIT);
+	
+	PhysicsEngine::getEngine().updateState();
+
 	setUniforms();
 	glDrawElements(GL_TRIANGLES, renderElements, GL_UNSIGNED_INT, 0);
 	BOOL res = SwapBuffers(hdc);
@@ -181,6 +186,10 @@ void Renderer::setCamPosition(const glm::vec3 & position)
 
 void Renderer::setUniforms()
 {
+	//int BALL = glGetUniformLocation(glProgram, "BALL");
+
+	//glUniform3f(BALL, 0, 0, 0);
+
 	if (!changed)
 		return;
 

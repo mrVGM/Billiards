@@ -4,6 +4,8 @@
 
 #include <GL/glew.h>
 
+#include "PhysicsEngine.h"
+
 App app;
 
 BOOL App::InitInstance()

@@ -33,6 +33,7 @@
     <ClInclude Include="src\Utils.h">
       <Filter>headers</Filter>
     </ClInclude>
+    <ClInclude Include="src\PhysicsEngine.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\MainWindow.cpp">
@@ -50,6 +51,7 @@
     <ClCompile Include="src\Utils.cpp">
       <Filter>source files</Filter>
     </ClCompile>
+    <ClCompile Include="src\PhysicsEngine.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="src\Billiards.rc">

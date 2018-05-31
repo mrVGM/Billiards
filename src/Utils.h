@@ -11,3 +11,4 @@ struct Segment
 };
 
 bool intersects(const glm::vec3 & point, const glm::vec3 & dir, const Segment & segment, glm::vec3 & intersection);
+glm::vec3 reflect(const glm::vec3 & ray, const glm::vec3 & surf);
