@@ -7,6 +7,7 @@ layout(location = 2) in float modelId;
 uniform vec3 CAM;
 uniform mat3 TR;
 uniform vec2 AXES;
+uniform vec3 BALL;
 
 varying vec3 col;
 
@@ -16,6 +17,7 @@ void main()
 
 	if (modelId == 1)
 	{
+		pos += BALL;
 		pos += vec3(0, 0, 5 + 5.25 / 2.0);
 	}
 	pos = pos - CAM;

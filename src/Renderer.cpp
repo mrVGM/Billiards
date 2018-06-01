@@ -186,9 +186,9 @@ void Renderer::setCamPosition(const glm::vec3 & position)
 
 void Renderer::setUniforms()
 {
-	//int BALL = glGetUniformLocation(glProgram, "BALL");
+	int BALL = glGetUniformLocation(glProgram, "BALL");
 
-	//glUniform3f(BALL, 0, 0, 0);
+	glUniform3f(BALL, PhysicsEngine::getEngine().balls[0].position.x, PhysicsEngine::getEngine().balls[0].position.y, PhysicsEngine::getEngine().balls[0].position.z);
 
 	if (!changed)
 		return;

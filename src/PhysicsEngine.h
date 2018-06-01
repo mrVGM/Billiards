@@ -19,9 +19,5 @@ public:
 	void updateState();
 	static PhysicsEngine & getEngine();
 
-	~PhysicsEngine()
-	{
-		int f = 324;
-	}
 };
 
