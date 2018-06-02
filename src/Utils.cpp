@@ -22,7 +22,7 @@ bool intersects(const glm::vec3 & point, const glm::vec3 & dir, const Segment & 
 	Vector tmp1 = glm::cross(v1, dir);
 	Vector tmp2 = glm::cross(dir, v2);
 
-	if (tmp1.z * tmp2.z < 0)
+	if (tmp1.z < 0 || tmp2.z < 0)
 		return false;
 
 	Vector x = glm::normalize(dir);

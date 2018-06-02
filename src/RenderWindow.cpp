@@ -22,7 +22,7 @@ void RenderWindow::startRendering()
 
 	PhysicsEngine::getEngine().balls.push_back(Ball());
 	PhysicsEngine::getEngine().balls[0].position = glm::vec3(0, 0, 0);
-	PhysicsEngine::getEngine().balls[0].velocity = glm::vec3(0, 30, 0);
+	PhysicsEngine::getEngine().balls[0].velocity = glm::vec3(10, 30, 0);
 
 	PhysicsEngine::getEngine().time = GetTickCount();
 
