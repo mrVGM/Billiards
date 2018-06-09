@@ -18,6 +18,7 @@ public:
 
 	void updateState();
 	static PhysicsEngine & getEngine();
+	static float acceleration;
 
 };
 

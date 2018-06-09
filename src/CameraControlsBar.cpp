@@ -1,6 +1,7 @@
 #include "stdafx.h"
 
 #include "CameraControlsBar.h"
+#include "PhysicsEngine.h"
 
 #include "gtc\constants.hpp"
 
@@ -8,7 +9,10 @@
 
 BEGIN_MESSAGE_MAP(CameraControlsBar, CDialog)
 	ON_EN_CHANGE(IDC_EDIT1, OnChangeCaption)
+	ON_EN_CHANGE(IDC_ACCELERATION, OnChangeCaption)
+	ON_EN_CHANGE(IDC_SPEED, OnChangeCaption)
 	ON_WM_HSCROLL(OnHScroll)
+	ON_BN_CLICKED(IDC_STARTBUTTON, OnStartButtonClick)
 END_MESSAGE_MAP()
 
 CameraControlsBar::CameraControlsBar() : changed(false)
@@ -56,12 +60,27 @@ BOOL CameraControlsBar::OnInitDialog()
 void CameraControlsBar::OnChangeCaption()
 {
 	CWnd * editBox = GetDlgItem(IDC_EDIT1);
+	CWnd * editBoxAcceleration = GetDlgItem(IDC_ACCELERATION);
+	CWnd * editBoxSpeed = GetDlgItem(IDC_SPEED);
 	CString cStr;
 	editBox->GetWindowTextA(cStr);
 	std::stringstream ss;
 	ss << cStr.GetString();
 	ss >> dist;
 	changed = true;
+	editBoxAcceleration->GetWindowTextA(cStr);
+	ss.str("");
+	ss.clear();
+	ss << cStr.GetString();
+	ss >> PhysicsEngine::acceleration;
+
+	editBoxSpeed->GetWindowTextA(cStr);
+	ss.str("");
+	ss.clear();
+	ss << cStr.GetString();
+	float speed;
+	ss >> speed;
+	PhysicsEngine::getEngine().balls[0].velocity = glm::normalize(PhysicsEngine::getEngine().balls[0].velocity) * speed;
 }
 
 void CameraControlsBar::OnHScroll(UINT nSBCode, UINT nPos, CScrollBar* pScrollBar)
@@ -73,6 +92,11 @@ void CameraControlsBar::OnHScroll(UINT nSBCode, UINT nPos, CScrollBar* pScrollBa
 		meridian = slider->GetPos();
 
 	updateCamPosition();
+}
+
+void CameraControlsBar::OnStartButtonClick()
+{
+	PhysicsEngine::getEngine().balls[0].velocity = glm::vec3(10, 30, 0);
 }
 
 void CameraControlsBar::updateCamPosition()

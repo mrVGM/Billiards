@@ -33,7 +33,9 @@
     <ClInclude Include="src\Utils.h">
       <Filter>headers</Filter>
     </ClInclude>
-    <ClInclude Include="src\PhysicsEngine.h" />
+    <ClInclude Include="src\PhysicsEngine.h">
+      <Filter>headers</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\MainWindow.cpp">
@@ -51,7 +53,9 @@
     <ClCompile Include="src\Utils.cpp">
       <Filter>source files</Filter>
     </ClCompile>
-    <ClCompile Include="src\PhysicsEngine.cpp" />
+    <ClCompile Include="src\PhysicsEngine.cpp">
+      <Filter>source files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="src\Billiards.rc">

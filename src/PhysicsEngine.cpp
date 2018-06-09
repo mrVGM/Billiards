@@ -1,10 +1,15 @@
 #include "stdafx.h"
 #include "PhysicsEngine.h"
 #include "Utils.h"
+#include <fstream>
 
 #include "glm.hpp"
 
+std::ofstream os("dump.txt");
+
 static PhysicsEngine pe;
+
+float PhysicsEngine::acceleration = -1;
 
 Segment PhysicsEngine::s1(glm::vec3(-88.9 + 5.25 / 2.0, -178.45 + 5.25 / 2.0, 0), glm::vec3(88.9 - 5.25 / 2.0, -178.45 + 5.25 / 2.0, 0));
 Segment PhysicsEngine::s2(glm::vec3(88.9 - 5.25 / 2.0, -178.45 + 5.25 / 2.0, 0), glm::vec3(88.9 - 5.25 / 2.0, 178.45 - 5.25 / 2.0, 0));
@@ -25,7 +30,26 @@ void PhysicsEngine::updateState()
 	for (int i = 0; i < balls.size(); ++i)
 	{
 		Ball & curBall = balls[i];
-		glm::vec3 offset = diff * curBall.velocity;
+
+		if (length(curBall.velocity) == 0.0f)
+		{
+			break;
+		}
+
+		float currentVelocity = length(curBall.velocity);
+		float newVelocity = acceleration * diff + currentVelocity;
+
+		os << "currentVelocity:" << currentVelocity << std::endl;
+		os << "newVelocity:" << newVelocity << std::endl;
+
+		if (newVelocity < 0)
+		{
+			curBall.velocity *= 0.0f;
+			
+			diff = -length(curBall.velocity) / acceleration;
+		}
+
+		glm::vec3 offset = (0.5f * acceleration * diff * diff + length(curBall.velocity) * diff) *  glm::normalize(curBall.velocity);
 
 		while (length(offset) > 0)
 		{
@@ -57,6 +81,7 @@ void PhysicsEngine::updateState()
 			if (!segment)
 			{
 				curBall.position += offset;
+				curBall.velocity *= newVelocity / currentVelocity;
 				break;
 			}
 			
@@ -64,7 +89,7 @@ void PhysicsEngine::updateState()
 
 			glm::vec3 unitDir = glm::normalize(reflect(offset, segment->p1 - segment->p2));
 			offset = reminder * unitDir;
-			curBall.velocity = length(curBall.velocity) * unitDir;
+			curBall.velocity = newVelocity * unitDir;
 			curBall.position = intersection;
 		}
 	}

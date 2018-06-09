@@ -17,6 +17,8 @@ public:
 	void OnChangeCaption();
 	void OnHScroll(UINT nSBCode, UINT nPos, CScrollBar* pScrollBar);
 
+	void OnStartButtonClick();
+
 	void updateCamPosition();
 
 	DECLARE_MESSAGE_MAP()
