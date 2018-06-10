@@ -1,7 +1,7 @@
 #include "stdafx.h"
 
 #include "CameraControlsBar.h"
-#include "PhysicsEngine.h"
+#include "Physics.h"
 
 #include "gtc\constants.hpp"
 
@@ -72,7 +72,7 @@ void CameraControlsBar::OnChangeCaption()
 	ss.str("");
 	ss.clear();
 	ss << cStr.GetString();
-	ss >> PhysicsEngine::acceleration;
+	ss >> Physics::acceleration;
 
 	editBoxSpeed->GetWindowTextA(cStr);
 	ss.str("");
@@ -80,7 +80,7 @@ void CameraControlsBar::OnChangeCaption()
 	ss << cStr.GetString();
 	float speed;
 	ss >> speed;
-	PhysicsEngine::getEngine().balls[0].velocity = glm::normalize(PhysicsEngine::getEngine().balls[0].velocity) * speed;
+	Physics::getEngine().balls[0].velocity = glm::normalize(Physics::getEngine().balls[0].velocity) * speed;
 }
 
 void CameraControlsBar::OnHScroll(UINT nSBCode, UINT nPos, CScrollBar* pScrollBar)
@@ -96,7 +96,7 @@ void CameraControlsBar::OnHScroll(UINT nSBCode, UINT nPos, CScrollBar* pScrollBa
 
 void CameraControlsBar::OnStartButtonClick()
 {
-	PhysicsEngine::getEngine().balls[0].velocity = glm::vec3(10, 30, 0);
+	Physics::getEngine().balls[0].velocity = glm::vec3(10, 30, 0);
 }
 
 void CameraControlsBar::updateCamPosition()

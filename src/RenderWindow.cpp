@@ -2,7 +2,7 @@
 
 #include "RenderWindow.h"
 #include "GL/glew.h"
-#include "PhysicsEngine.h"
+#include "Physics.h"
 
 RenderWindow::RenderWindow() : renderThread(NULL)
 {
@@ -20,10 +20,10 @@ void RenderWindow::startRendering()
 
 	rendering = true;
 
-	PhysicsEngine::getEngine().balls.push_back(Ball());
-	PhysicsEngine::getEngine().balls[0].position = glm::vec3(0, 0, 0);
+	Physics::getEngine().balls.push_back(Ball());
+	Physics::getEngine().balls[0].position = glm::vec3(0, 0, 0);
 
-	PhysicsEngine::getEngine().time = GetTickCount();
+	Physics::getEngine().time = GetTickCount();
 
 	renderThread = new std::thread(worker);
 }

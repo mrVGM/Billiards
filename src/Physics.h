@@ -9,7 +9,7 @@ struct Ball
 	glm::vec3 velocity;
 };
 
-class PhysicsEngine
+class Physics
 {
 public:
 	long time;
@@ -17,7 +17,7 @@ public:
 	static Segment s1, s2, s3, s4;
 
 	void updateState();
-	static PhysicsEngine & getEngine();
+	static Physics & getEngine();
 	static float acceleration;
 
 };

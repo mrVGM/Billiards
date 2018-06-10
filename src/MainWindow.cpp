@@ -4,7 +4,7 @@
 
 #include <GL/glew.h>
 
-#include "PhysicsEngine.h"
+#include "Physics.h"
 
 App app;
 

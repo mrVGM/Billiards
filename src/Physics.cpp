@@ -1,27 +1,25 @@
 #include "stdafx.h"
-#include "PhysicsEngine.h"
+#include "Physics.h"
 #include "Utils.h"
 #include <fstream>
 
 #include "glm.hpp"
 
-std::ofstream os("dump.txt");
+static Physics pe;
 
-static PhysicsEngine pe;
+float Physics::acceleration = -1;
 
-float PhysicsEngine::acceleration = -1;
+Segment Physics::s1(glm::vec3(-88.9 + 5.25 / 2.0, -178.45 + 5.25 / 2.0, 0), glm::vec3(88.9 - 5.25 / 2.0, -178.45 + 5.25 / 2.0, 0));
+Segment Physics::s2(glm::vec3(88.9 - 5.25 / 2.0, -178.45 + 5.25 / 2.0, 0), glm::vec3(88.9 - 5.25 / 2.0, 178.45 - 5.25 / 2.0, 0));
+Segment Physics::s3(glm::vec3(88.9 + 5.25 / 2.0, 178.45 - 5.25 / 2.0, 0), glm::vec3(-88.9 - 5.25 / 2.0, 178.45 - 5.25 / 2.0, 0));
+Segment Physics::s4(glm::vec3(-88.9 + 5.25 / 2.0, 178.45 + 5.25 / 2.0, 0), glm::vec3(-88.9 + 5.25 / 2.0, -178.45 - 5.25 / 2.0, 0));
 
-Segment PhysicsEngine::s1(glm::vec3(-88.9 + 5.25 / 2.0, -178.45 + 5.25 / 2.0, 0), glm::vec3(88.9 - 5.25 / 2.0, -178.45 + 5.25 / 2.0, 0));
-Segment PhysicsEngine::s2(glm::vec3(88.9 - 5.25 / 2.0, -178.45 + 5.25 / 2.0, 0), glm::vec3(88.9 - 5.25 / 2.0, 178.45 - 5.25 / 2.0, 0));
-Segment PhysicsEngine::s3(glm::vec3(88.9 + 5.25 / 2.0, 178.45 - 5.25 / 2.0, 0), glm::vec3(-88.9 - 5.25 / 2.0, 178.45 - 5.25 / 2.0, 0));
-Segment PhysicsEngine::s4(glm::vec3(-88.9 + 5.25 / 2.0, 178.45 + 5.25 / 2.0, 0), glm::vec3(-88.9 + 5.25 / 2.0, -178.45 - 5.25 / 2.0, 0));
-
-PhysicsEngine & PhysicsEngine::getEngine()
+Physics & Physics::getEngine()
 {
 	return pe;
 }
 
-void PhysicsEngine::updateState()
+void Physics::updateState()
 {
 	long newTime = GetTickCount();
 
@@ -38,9 +36,6 @@ void PhysicsEngine::updateState()
 
 		float currentVelocity = length(curBall.velocity);
 		float newVelocity = acceleration * diff + currentVelocity;
-
-		os << "currentVelocity:" << currentVelocity << std::endl;
-		os << "newVelocity:" << newVelocity << std::endl;
 
 		if (newVelocity < 0)
 		{

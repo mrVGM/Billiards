@@ -10,7 +10,7 @@
 
 #include <gtc\constants.hpp>
 
-#include "PhysicsEngine.h"
+#include "Physics.h"
 
 Renderer::Renderer()
 {
@@ -95,7 +95,7 @@ void Renderer::render(HDC hdc)
 	glClear(GL_COLOR_BUFFER_BIT);
 	glClear(GL_DEPTH_BUFFER_BIT);
 	
-	PhysicsEngine::getEngine().updateState();
+	Physics::getEngine().updateState();
 
 	setUniforms();
 	glDrawElements(GL_TRIANGLES, renderElements, GL_UNSIGNED_INT, 0);
@@ -188,7 +188,7 @@ void Renderer::setUniforms()
 {
 	int BALL = glGetUniformLocation(glProgram, "BALL");
 
-	glUniform3f(BALL, PhysicsEngine::getEngine().balls[0].position.x, PhysicsEngine::getEngine().balls[0].position.y, PhysicsEngine::getEngine().balls[0].position.z);
+	glUniform3f(BALL, Physics::getEngine().balls[0].position.x, Physics::getEngine().balls[0].position.y, Physics::getEngine().balls[0].position.z);
 
 	if (!changed)
 		return;
