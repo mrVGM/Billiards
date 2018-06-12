@@ -6,6 +6,7 @@
 #define IMPLEMENT_EVENT_HANDLE(name) void EventInstances:: name ::handle() \
 { \
 	Physics::getEngine().handle(this); \
+	delete this; \
 }
 
 IMPLEMENT_EVENT_HANDLE(BallStopped)

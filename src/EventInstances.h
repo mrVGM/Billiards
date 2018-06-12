@@ -21,7 +21,7 @@ namespace EventInstances
 
 	BEGIN_DECLARE_EVENT(BoardBounce)
 		Ball * ball;
-		Utils::Segment * segment;
+		const Utils::Segment * segment;
 	END_DECLARE_EVENT
 
 }

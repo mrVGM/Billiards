@@ -96,8 +96,8 @@ void Renderer::render(HDC hdc)
 	glClear(GL_DEPTH_BUFFER_BIT);
 	
 	Physics::getEngine().updateState();
-
 	setUniforms();
+
 	glDrawElements(GL_TRIANGLES, renderElements, GL_UNSIGNED_INT, 0);
 	BOOL res = SwapBuffers(hdc);
 }

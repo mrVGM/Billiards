@@ -9,31 +9,33 @@
 
 #include "EventInstances.h"
 
-static bool boardBounce(const glm::vec3 & position, const glm::vec3 & offset, Utils::Segment & segment, glm::vec3 & intersection)
+static EventManager em;
+
+static bool boardBounce(const glm::vec3 & position, const glm::vec3 & offset, const Utils::Segment * & segment, glm::vec3 & intersection)
 {
 	bool lies;
 
 	if (Utils::intersects(position, offset, Physics::s1, intersection, lies))
 	{
-		segment = Physics::s1;
+		segment = &Physics::s1;
 	}
 	else if (Utils::intersects(position, offset, Physics::s2, intersection, lies))
 	{
-		segment = Physics::s2;
+		segment = &Physics::s2;
 	}
 	else if (Utils::intersects(position, offset, Physics::s3, intersection, lies))
 	{
-		segment = Physics::s3;
+		segment = &Physics::s3;
 	}
 	else if (Utils::intersects(position, offset, Physics::s4, intersection, lies))
 	{
-		segment = Physics::s4;
+		segment = &Physics::s4;
 	}
 	else {
 		return false;
 	}
 
-	if (lies && glm::cross(segment.p2 - segment.p1, offset).z >= 0)
+	if (lies && glm::cross(segment->p2 - segment->p1, offset).z >= 0)
 		return false;
 
 	return true;
@@ -55,6 +57,7 @@ Event * EventManager::nextEvent()
 	{
 		EventInstances::BallStopped * ballStopped = new EventInstances::BallStopped;
 		ballStopped->time = p.time;
+		ballStopped->ball = &curBall;
 		eventQueue.push(new EventInstances::EndFrame);
 		return ballStopped;
 	}
@@ -70,7 +73,7 @@ Event * EventManager::nextEvent()
 
 	glm::vec3 offset = Utils::route(t, Utils::length(curBall.velocity), Physics::acceleration) * glm::normalize(curBall.velocity);
 
-	Utils::Segment segment;
+	const Utils::Segment const * segment;
 	glm::vec3 intersection;
 
 	if (boardBounce(curBall.position, offset, segment, intersection))
@@ -80,9 +83,14 @@ Event * EventManager::nextEvent()
 		//0.5 * a * t^2 + v0 * t = distToBounce
 		bb->time = Utils::time(distToBounce, Utils::length(curBall.velocity), Physics::acceleration);
 		bb->ball = &curBall;
-		bb->segment = &segment;
+		bb->segment = segment;
 		return bb;
 	}
 
 	return new EventInstances::EndFrame();
+}
+
+EventManager & EventManager::getEventManager()
+{
+	return em;
 }

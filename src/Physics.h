@@ -8,13 +8,15 @@
 class Physics
 {
 public:
-	long time;
+	double time;
 	std::vector<Ball> balls;
-	static Utils::Segment s1, s2, s3, s4;
+	static const Utils::Segment s1, s2, s3, s4;
 
 	void updateState();
 	static Physics & getEngine();
 	static float acceleration;
+
+	void move(float t);
 
 	void handle(EventInstances::BallStopped * e);
 	void handle(EventInstances::BoardBounce * e);

@@ -8,6 +8,10 @@ class Event
 public:
 	float time;
 	virtual void handle() = 0;
+	~Event()
+	{
+		bool r = true;
+	}
 };
 
 class EventManager
@@ -15,4 +19,5 @@ class EventManager
 public:
 	std::queue<Event *> eventQueue;
 	Event * nextEvent();
+	static EventManager & getEventManager();
 };

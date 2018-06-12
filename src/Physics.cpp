@@ -9,10 +9,10 @@ static Physics pe;
 
 float Physics::acceleration = -1;
 
-Utils::Segment Physics::s1(glm::vec3(-88.9 + 5.25 / 2.0, -178.45 + 5.25 / 2.0, 0), glm::vec3(88.9 - 5.25 / 2.0, -178.45 + 5.25 / 2.0, 0));
-Utils::Segment Physics::s2(glm::vec3(88.9 - 5.25 / 2.0, -178.45 + 5.25 / 2.0, 0), glm::vec3(88.9 - 5.25 / 2.0, 178.45 - 5.25 / 2.0, 0));
-Utils::Segment Physics::s3(glm::vec3(88.9 + 5.25 / 2.0, 178.45 - 5.25 / 2.0, 0), glm::vec3(-88.9 - 5.25 / 2.0, 178.45 - 5.25 / 2.0, 0));
-Utils::Segment Physics::s4(glm::vec3(-88.9 + 5.25 / 2.0, 178.45 + 5.25 / 2.0, 0), glm::vec3(-88.9 + 5.25 / 2.0, -178.45 - 5.25 / 2.0, 0));
+const Utils::Segment Physics::s1(glm::vec3(-88.9 + 5.25 / 2.0, -178.45 + 5.25 / 2.0, 0), glm::vec3(88.9 - 5.25 / 2.0, -178.45 + 5.25 / 2.0, 0));
+const Utils::Segment Physics::s2(glm::vec3(88.9 - 5.25 / 2.0, -178.45 + 5.25 / 2.0, 0), glm::vec3(88.9 - 5.25 / 2.0, 178.45 - 5.25 / 2.0, 0));
+const Utils::Segment Physics::s3(glm::vec3(88.9 + 5.25 / 2.0, 178.45 - 5.25 / 2.0, 0), glm::vec3(-88.9 - 5.25 / 2.0, 178.45 - 5.25 / 2.0, 0));
+const Utils::Segment Physics::s4(glm::vec3(-88.9 + 5.25 / 2.0, 178.45 + 5.25 / 2.0, 0), glm::vec3(-88.9 + 5.25 / 2.0, -178.45 - 5.25 / 2.0, 0));
 
 Physics & Physics::getEngine()
 {
@@ -21,80 +21,47 @@ Physics & Physics::getEngine()
 
 void Physics::updateState()
 {
-	long newTime = GetTickCount();
-
-	float diff = (newTime - time) / 1000.0f;
-
-	for (int i = 0; i < balls.size(); ++i)
+	EventManager & em = EventManager::getEventManager();
+	
+	Event * e;
+	bool finished = false;
+	do
 	{
-		Ball & curBall = balls[i];
-
-		if (Utils::length(curBall.velocity) == 0.0f)
-		{
-			break;
-		}
-
-		float currentVelocity = Utils::length(curBall.velocity);
-		float newVelocity = acceleration * diff + currentVelocity;
-
-		if (newVelocity < 0)
-		{
-			curBall.velocity *= 0.0f;
-			
-			diff = -Utils::length(curBall.velocity) / acceleration;
-		}
-
-		glm::vec3 offset = (0.5f * acceleration * diff * diff + Utils::length(curBall.velocity) * diff) *  glm::normalize(curBall.velocity);
-
-		while (Utils::length(offset) > 0)
-		{
-			glm::vec3 intersection;
-
-			Utils::Segment * segment = 0;
-			bool lies;
-
-			if (Utils::intersects(curBall.position, offset, s1, intersection, lies))
-			{
-				segment = &s1;
-			}
-			else if (Utils::intersects(curBall.position, offset, s2, intersection, lies))
-			{
-				segment = &s2;
-			}
-			else if (Utils::intersects(curBall.position, offset, s3, intersection, lies))
-			{
-				segment = &s3;
-			}
-			else if (Utils::intersects(curBall.position, offset, s4, intersection, lies))
-			{
-				segment = &s4;
-			}
-			
-			if (lies && glm::cross(segment->p2 - segment->p1, curBall.velocity).z >=0)
-				segment = 0;
-
-			if (!segment)
-			{
-				curBall.position += offset;
-				curBall.velocity *= newVelocity / currentVelocity;
-				break;
-			}
-			
-			float reminder = Utils::length(offset) - Utils::length(intersection - curBall.position);
-
-			glm::vec3 unitDir = glm::normalize(Utils::reflect(offset, segment->p1 - segment->p2));
-			offset = reminder * unitDir;
-			curBall.velocity = newVelocity * unitDir;
-			curBall.position = intersection;
-		}
-	}
-
-	time = newTime;
+		e = em.nextEvent();
+		finished = dynamic_cast<EventInstances::EndFrame *>(e);
+		e->handle();
+	} while (!finished);
+	
 }
 
 void Physics::handle(EventInstances::BallStopped * e)
-{}
+{
+	e->ball->stopped = true;
+	Physics::time = e->time;
+}
 void Physics::handle(EventInstances::BoardBounce * e)
-{}
+{
+	double t = e->time - Physics::time;
+	move(t);
+	e->ball->velocity = Utils::reflect(e->ball->velocity, e->segment->p2 - e->segment->p1);
+	Physics::time = e->time;
+}
 void Physics::handle(EventInstances::EndFrame * e)
-{}
+{
+	double t = RenderWindow::waitingTime / 1000.0 - Physics::time;
+	move(t);
+	Physics::time = 0.0;
+}
+
+void Physics::move(float t)
+{
+	for (int i = 0; i < Physics::getEngine().balls.size(); ++i)
+	{
+		if (Physics::getEngine().balls[i].stopped)
+			continue;
+		float dist = Utils::route(t, Utils::length(Physics::getEngine().balls[i].velocity), Physics::acceleration);
+		float speed = Utils::speed(t, Utils::length(Physics::getEngine().balls[i].velocity), Physics::acceleration);
+		Physics::getEngine().balls[i].velocity = speed * glm::normalize(Physics::getEngine().balls[i].velocity);
+		Physics::getEngine().balls[i].position += dist * glm::normalize(Physics::getEngine().balls[i].velocity);
+	}
+}

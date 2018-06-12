@@ -25,7 +25,7 @@ void RenderWindow::startRendering()
 	Physics::getEngine().balls.push_back(Ball());
 	Physics::getEngine().balls[0].position = glm::vec3(0, 0, 0);
 
-	Physics::getEngine().time = GetTickCount();
+	Physics::getEngine().time = 0.0;
 
 	renderThread = new std::thread(worker);
 }
