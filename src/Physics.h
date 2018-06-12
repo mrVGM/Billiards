@@ -14,7 +14,7 @@ class Physics
 public:
 	long time;
 	std::vector<Ball> balls;
-	static Segment s1, s2, s3, s4;
+	static Utils::Segment s1, s2, s3, s4;
 
 	void updateState();
 	static Physics & getEngine();

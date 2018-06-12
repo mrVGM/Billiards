@@ -5,7 +5,7 @@
 typedef glm::vec3 Point;
 typedef glm::vec3 Vector;
 
-bool intersects(const glm::vec3 & point, const glm::vec3 & dir, const Segment & segment, glm::vec3 & intersection, bool &lies)
+bool Utils::intersects(const glm::vec3 & point, const glm::vec3 & dir, const Utils::Segment & segment, glm::vec3 & intersection, bool &lies)
 {
 	Vector v1 = segment.p1 - point;
 	Vector v2 = segment.p2 - point;
@@ -40,13 +40,13 @@ bool intersects(const glm::vec3 & point, const glm::vec3 & dir, const Segment & 
 
 	intersection = segment.p1 * c2 / (c1 + c2) + segment.p2 * c1 / (c1 + c2);
 
-	if (length(intersection - point) > length(dir))
+	if (Utils::length(intersection - point) > Utils::length(dir))
 		return false;
 
 	return true;
 }
 
-glm::vec3 reflect(const glm::vec3 & ray, const glm::vec3 & surf)
+glm::vec3 Utils::reflect(const glm::vec3 & ray, const glm::vec3 & surf)
 {
 	glm::vec3 x = glm::normalize(surf);
 	glm::vec3 z(0,0,1);
@@ -61,7 +61,7 @@ glm::vec3 reflect(const glm::vec3 & ray, const glm::vec3 & surf)
 	return tr * r;
 }
 
-float length(const glm::vec3 & v)
+float Utils::length(const glm::vec3 & v)
 {
 	return sqrt(v.x * v.x + v.y * v.y + v.z * v.z);
 }
