@@ -2,12 +2,8 @@
 
 #include <vector>
 #include "Utils.h"
-
-struct Ball
-{
-	glm::vec3 position;
-	glm::vec3 velocity;
-};
+#include "Primitives.h"
+#include "EventInstances.h"
 
 class Physics
 {
@@ -20,5 +16,8 @@ public:
 	static Physics & getEngine();
 	static float acceleration;
 
+	void handle(EventInstances::BallStopped * e);
+	void handle(EventInstances::BoardBounce * e);
+	void handle(EventInstances::EndFrame * e);
 };
 

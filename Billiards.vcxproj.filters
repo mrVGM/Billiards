@@ -36,6 +36,15 @@
     <ClInclude Include="src\Physics.h">
       <Filter>headers</Filter>
     </ClInclude>
+    <ClInclude Include="src\Primitives.h">
+      <Filter>headers</Filter>
+    </ClInclude>
+    <ClInclude Include="src\EventInstances.h">
+      <Filter>headers</Filter>
+    </ClInclude>
+    <ClInclude Include="src\EventManager.h">
+      <Filter>headers</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\MainWindow.cpp">
@@ -54,6 +63,12 @@
       <Filter>source files</Filter>
     </ClCompile>
     <ClCompile Include="src\Physics.cpp">
+      <Filter>source files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\EventInstances.cpp">
+      <Filter>source files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\EventManager.cpp">
       <Filter>source files</Filter>
     </ClCompile>
   </ItemGroup>

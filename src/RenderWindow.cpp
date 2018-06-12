@@ -4,6 +4,8 @@
 #include "GL/glew.h"
 #include "Physics.h"
 
+const int RenderWindow::waitingTime = 25;
+
 RenderWindow::RenderWindow() : renderThread(NULL)
 {
 }
@@ -89,6 +91,6 @@ void RenderWindow::render()
 	while (rendering)
 	{
 		renderer.render(hdc);
-		Sleep(25);
+		Sleep(RenderWindow::waitingTime);
 	}
 }

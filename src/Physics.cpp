@@ -91,3 +91,10 @@ void Physics::updateState()
 
 	time = newTime;
 }
+
+void Physics::handle(EventInstances::BallStopped * e)
+{}
+void Physics::handle(EventInstances::BoardBounce * e)
+{}
+void Physics::handle(EventInstances::EndFrame * e)
+{}

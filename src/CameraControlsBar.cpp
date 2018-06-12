@@ -60,27 +60,13 @@ BOOL CameraControlsBar::OnInitDialog()
 void CameraControlsBar::OnChangeCaption()
 {
 	CWnd * editBox = GetDlgItem(IDC_EDIT1);
-	CWnd * editBoxAcceleration = GetDlgItem(IDC_ACCELERATION);
-	CWnd * editBoxSpeed = GetDlgItem(IDC_SPEED);
+	
 	CString cStr;
 	editBox->GetWindowTextA(cStr);
 	std::stringstream ss;
 	ss << cStr.GetString();
 	ss >> dist;
 	changed = true;
-	editBoxAcceleration->GetWindowTextA(cStr);
-	ss.str("");
-	ss.clear();
-	ss << cStr.GetString();
-	ss >> Physics::acceleration;
-
-	editBoxSpeed->GetWindowTextA(cStr);
-	ss.str("");
-	ss.clear();
-	ss << cStr.GetString();
-	float speed;
-	ss >> speed;
-	Physics::getEngine().balls[0].velocity = glm::normalize(Physics::getEngine().balls[0].velocity) * speed;
 }
 
 void CameraControlsBar::OnHScroll(UINT nSBCode, UINT nPos, CScrollBar* pScrollBar)

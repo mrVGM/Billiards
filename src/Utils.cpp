@@ -65,3 +65,20 @@ float Utils::length(const glm::vec3 & v)
 {
 	return sqrt(v.x * v.x + v.y * v.y + v.z * v.z);
 }
+
+float Utils::route(float t, float v, float a)
+{
+	return 0.5 * a * t * t + v * t;
+}
+float Utils::speed(float t, float v, float a)
+{
+	return a * t + v;
+}
+float Utils::time(float s, float v, float a)
+{
+	float D = v * v + 2 * a * s;
+	float res = (-v - sqrt(D)) / a;
+	if (res < 0)
+		res = (-v + sqrt(D)) / a;
+	return res;
+}

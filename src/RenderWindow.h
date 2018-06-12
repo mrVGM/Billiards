@@ -11,6 +11,7 @@ class RenderWindow : public CWnd
 	friend void worker();
 	void render();
 public:
+	static const int waitingTime;
 	HDC hdc;
 	Renderer renderer;
 	RenderWindow();

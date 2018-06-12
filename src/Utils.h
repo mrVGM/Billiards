@@ -16,4 +16,8 @@ namespace Utils
 	glm::vec3 reflect(const glm::vec3 & ray, const glm::vec3 & surf);
 
 	float length(const glm::vec3 & v);
+
+	float route(float t, float v, float a);
+	float speed(float t, float v, float a);
+	float time(float s, float v, float a);
 }

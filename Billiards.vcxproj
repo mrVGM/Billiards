@@ -191,8 +191,11 @@ COPY $(SolutionDir)src\ball.obj $(SolutionDir)final\res\ball.obj</Command>
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClInclude Include="src\CameraControlsBar.h" />
+    <ClInclude Include="src\EventInstances.h" />
+    <ClInclude Include="src\EventManager.h" />
     <ClInclude Include="src\MainWindow.h" />
     <ClInclude Include="src\Physics.h" />
+    <ClInclude Include="src\Primitives.h" />
     <ClInclude Include="src\Renderer.h" />
     <ClInclude Include="src\RenderWindow.h" />
     <ClInclude Include="src\resource.h" />
@@ -201,6 +204,8 @@ COPY $(SolutionDir)src\ball.obj $(SolutionDir)final\res\ball.obj</Command>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\CameraControlsBar.cpp" />
+    <ClCompile Include="src\EventInstances.cpp" />
+    <ClCompile Include="src\EventManager.cpp" />
     <ClCompile Include="src\MainWindow.cpp" />
     <ClCompile Include="src\Physics.cpp" />
     <ClCompile Include="src\Renderer.cpp" />
