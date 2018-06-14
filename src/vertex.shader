@@ -9,7 +9,7 @@ uniform mat3 TR;
 uniform vec2 AXES;
 uniform vec3 BALL;
 
-varying vec3 col;
+out vec3 col;
 
 void main()
 {

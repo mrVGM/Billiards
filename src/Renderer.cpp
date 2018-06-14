@@ -31,6 +31,8 @@ void Renderer::readFile(const char * fileName, std::string & dest)
 	std::string tmp;
 	while (std::getline(file, tmp))
 		dest += tmp + '\n';
+
+	file.close();
 }
 
 void Renderer::setupGPUProgram()
@@ -273,6 +275,8 @@ void Model::read(const char * fileName)
 			}
 		}
 	}
+
+	file.close();
 }
 
 void Model::add(const Model & other)

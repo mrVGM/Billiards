@@ -1,7 +1,6 @@
 #include "stdafx.h"
 #include "Physics.h"
 #include "Utils.h"
-#include <fstream>
 
 #include "glm.hpp"
 
