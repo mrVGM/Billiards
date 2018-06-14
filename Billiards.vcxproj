@@ -153,10 +153,16 @@
     <PostBuildEvent>
       <Command>MKDIR $(SolutionDir)final
 MKDIR $(SolutionDir)final\res
+
 COPY $(SolutionDir)build\Release\$(TargetFileName) $(SolutionDir)final
+
 COPY $(SolutionDir)src\vertex.shader $(SolutionDir)final\res
+
+COPY $(SolutionDir)src\geometry.shader $(SolutionDir)final\res
 COPY $(SolutionDir)src\fragment.shader $(SolutionDir)final\res
+
 COPY $(SolutionDir)src\table.obj $(SolutionDir)final\res\table.obj
+
 COPY $(SolutionDir)src\ball.obj $(SolutionDir)final\res\ball.obj</Command>
     </PostBuildEvent>
   </ItemDefinitionGroup>
@@ -182,10 +188,16 @@ COPY $(SolutionDir)src\ball.obj $(SolutionDir)final\res\ball.obj</Command>
     <PostBuildEvent>
       <Command>MKDIR $(SolutionDir)final
 MKDIR $(SolutionDir)final\res
+
 COPY $(SolutionDir)build\Release\$(TargetFileName) $(SolutionDir)final
+
 COPY $(SolutionDir)src\vertex.shader $(SolutionDir)final\res
+
+COPY $(SolutionDir)src\geometry.shader $(SolutionDir)final\res
 COPY $(SolutionDir)src\fragment.shader $(SolutionDir)final\res
+
 COPY $(SolutionDir)src\table.obj $(SolutionDir)final\res\table.obj
+
 COPY $(SolutionDir)src\ball.obj $(SolutionDir)final\res\ball.obj</Command>
     </PostBuildEvent>
   </ItemDefinitionGroup>

@@ -17,9 +17,11 @@ Renderer::Renderer()
 	std::string inputFilesDir(INPUT_FILES_DIR);
 	std::string vertexShaderPath = inputFilesDir + "vertex.shader";
 	std::string fragmentShaderPath = inputFilesDir + "fragment.shader";
+	std::string geometryShaderPath = inputFilesDir + "geometry.shader";
 
 	readFile(vertexShaderPath.c_str(), vertexShader);
 	readFile(fragmentShaderPath.c_str(), fragmentShader);
+	readFile(geometryShaderPath.c_str(), geometryShader);
 	
 	setCamPosition(glm::vec3(-10, -10, 10));
 }
@@ -41,9 +43,11 @@ void Renderer::setupGPUProgram()
 
 	std::string error;
 	int vs = compileShader(GL_VERTEX_SHADER, error);
+	int gs = compileShader(GL_GEOMETRY_SHADER, error);
 	int fs = compileShader(GL_FRAGMENT_SHADER, error);
 	
 	glAttachShader(program, vs);
+	glAttachShader(program, gs);
 	glAttachShader(program, fs);
 	glLinkProgram(program);
 	glValidateProgram(program);
@@ -118,6 +122,11 @@ int Renderer::compileShader(int type, std::string & error)
 	else if (type == GL_FRAGMENT_SHADER)
 	{
 		tmp = fragmentShader.c_str();
+		glShaderSource(shader, 1, &tmp, 0);
+	}
+	else if (type == GL_GEOMETRY_SHADER)
+	{
+		tmp = geometryShader.c_str();
 		glShaderSource(shader, 1, &tmp, 0);
 	}
 	glCompileShader(shader);

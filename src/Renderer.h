@@ -30,6 +30,7 @@ class Renderer
 private:
 	std::string vertexShader;
 	std::string fragmentShader;
+	std::string geometryShader;
 
 	void readFile(const char * fileName, std::string & dest);
 	int compileShader(int type, std::string & error);
