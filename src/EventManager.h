@@ -2,6 +2,7 @@
 
 #include <queue>
 #include "Utils.h"
+#include "Primitives.h"
 
 class Event
 {
@@ -16,6 +17,8 @@ public:
 
 class EventManager
 {
+private:
+	Event * nextEvent(Ball & ball);
 public:
 	std::queue<Event *> eventQueue;
 	Event * nextEvent();

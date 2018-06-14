@@ -51,19 +51,70 @@ Event * EventManager::nextEvent()
 	}
 
 	Physics & p = Physics::getEngine();
-	Ball & curBall = p.balls[0];
+
+	bool allStopped = true;
+
+	for (int i = 0; i < p.balls.size(); ++i)
+	{
+		if (!p.balls[i].stopped) 
+		{
+			allStopped = false;
+			break;
+		}
+	}
+
+	if (allStopped)
+		return new EventInstances::EndFrame();
+
+	std::vector<Event *> events;
+
+	float earliest = RenderWindow::waitingTime / 1000.0f + 1.0f;
+	for (int i = 0; i < p.balls.size(); ++i)
+	{
+		Event * cur = nextEvent(p.balls[i]);
+		if (cur)
+		{
+			events.push_back(cur);
+			if (cur->time < earliest)
+				earliest = cur->time;
+		}
+	}
+
+	if (events.empty())
+		return new EventInstances::EndFrame();
+
+	for (int i = 0; i < events.size(); ++i)
+	{
+		if (events[i]->time == earliest)
+			eventQueue.push(events[i]);
+		else
+			delete events[i];
+	}
+	Event * res = eventQueue.front();
+	eventQueue.pop();
+	return res;
+}
+
+EventManager & EventManager::getEventManager()
+{
+	return em;
+}
+
+Event * EventManager::nextEvent(Ball & ball)
+{
+	Physics & p = Physics::getEngine();
+	Ball & curBall = ball;
 
 	if (Utils::length(curBall.velocity) == 0.0f)
 	{
 		EventInstances::BallStopped * ballStopped = new EventInstances::BallStopped;
 		ballStopped->time = p.time;
 		ballStopped->ball = &curBall;
-		eventQueue.push(new EventInstances::EndFrame);
 		return ballStopped;
 	}
 
 	double t = RenderWindow::waitingTime / 1000.0 - p.time;
-	
+
 	double speed = Utils::length(curBall.velocity) + Physics::acceleration * t;
 	if (speed <= 0)
 	{
@@ -87,10 +138,5 @@ Event * EventManager::nextEvent()
 		return bb;
 	}
 
-	return new EventInstances::EndFrame();
-}
-
-EventManager & EventManager::getEventManager()
-{
-	return em;
+	return NULL;
 }
