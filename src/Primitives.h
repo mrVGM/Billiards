@@ -14,5 +14,6 @@ public:
 	int id;
 	bool stopped;
 	glm::vec3 position;
-	glm::vec3 velocity;
+	float speed;
+	glm::vec3 direction;
 };

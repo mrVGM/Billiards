@@ -82,10 +82,12 @@ void CameraControlsBar::OnHScroll(UINT nSBCode, UINT nPos, CScrollBar* pScrollBa
 
 void CameraControlsBar::OnStartButtonClick()
 {
-	Physics::getEngine().balls[0].velocity = glm::vec3(10, 30, 0);
+	Physics::getEngine().balls[0].direction = glm::normalize(glm::vec3(10, 30, 0));
+	Physics::getEngine().balls[0].speed = 31.0f;
 	Physics::getEngine().balls[0].stopped = false;
 
-	Physics::getEngine().balls[1].velocity = glm::vec3(10, 30, 0);
+	Physics::getEngine().balls[1].direction = glm::normalize(glm::vec3(10, 30, 0));
+	Physics::getEngine().balls[1].speed = 31.0f;
 	Physics::getEngine().balls[1].stopped = false;
 }
 

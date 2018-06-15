@@ -42,7 +42,7 @@ void Physics::handle(EventInstances::BoardBounce * e)
 {
 	double t = e->time - Physics::time;
 	move(t);
-	e->ball->velocity = Utils::reflect(e->ball->velocity, e->segment->p2 - e->segment->p1);
+	e->ball->direction = Utils::reflect(e->ball->direction, e->segment->p2 - e->segment->p1);
 	Physics::time = e->time;
 }
 void Physics::handle(EventInstances::EndFrame * e)
@@ -58,9 +58,10 @@ void Physics::move(float t)
 	{
 		if (Physics::getEngine().balls[i].stopped)
 			continue;
-		float dist = Utils::route(t, Utils::length(Physics::getEngine().balls[i].velocity), Physics::acceleration);
-		float speed = Utils::speed(t, Utils::length(Physics::getEngine().balls[i].velocity), Physics::acceleration);
-		Physics::getEngine().balls[i].velocity = speed * glm::normalize(Physics::getEngine().balls[i].velocity);
-		Physics::getEngine().balls[i].position += dist * glm::normalize(Physics::getEngine().balls[i].velocity);
+		float dist = Utils::route(t, Physics::getEngine().balls[i].speed, Physics::acceleration);
+		float sp = Utils::speed(t, Physics::getEngine().balls[i].speed, Physics::acceleration);
+
+		Physics::getEngine().balls[i].speed = sp;
+		Physics::getEngine().balls[i].position += dist * Physics::getEngine().balls[i].direction;
 	}
 }

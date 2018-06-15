@@ -94,7 +94,7 @@ Event * EventManager::nextEvent(Ball & ball)
 	if (curBall.stopped)
 		return NULL;
 
-	if (Utils::length(curBall.velocity) == 0.0f)
+	if (curBall.speed == 0.0f)
 	{
 		EventInstances::BallStopped * ballStopped = new EventInstances::BallStopped;
 		ballStopped->time = p.time;
@@ -104,14 +104,7 @@ Event * EventManager::nextEvent(Ball & ball)
 
 	double t = RenderWindow::waitingTime / 1000.0 - p.time;
 
-	double speed = Utils::length(curBall.velocity) + Physics::acceleration * t;
-	if (speed <= 0)
-	{
-		//0 = length(curBall.velocity) + Physics::acceleration * t
-		t = -Utils::length(curBall.velocity) / Physics::acceleration;
-	}
-
-	glm::vec3 offset = Utils::route(t, Utils::length(curBall.velocity), Physics::acceleration) * glm::normalize(curBall.velocity);
+	glm::vec3 offset = Utils::route(t, curBall.speed, Physics::acceleration) * curBall.direction;
 
 	const Utils::Segment const * segment;
 	glm::vec3 intersection;
@@ -121,7 +114,7 @@ Event * EventManager::nextEvent(Ball & ball)
 		EventInstances::BoardBounce * bb = new EventInstances::BoardBounce;
 		float distToBounce = Utils::length(intersection - curBall.position);
 		//0.5 * a * t^2 + v0 * t = distToBounce
-		bb->time = Utils::time(distToBounce, Utils::length(curBall.velocity), Physics::acceleration);
+		bb->time = Utils::time(distToBounce, curBall.speed, Physics::acceleration);
 		bb->ball = &curBall;
 		bb->segment = segment;
 		return bb;
