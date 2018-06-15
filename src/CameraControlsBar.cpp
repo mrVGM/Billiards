@@ -84,6 +84,9 @@ void CameraControlsBar::OnStartButtonClick()
 {
 	Physics::getEngine().balls[0].velocity = glm::vec3(10, 30, 0);
 	Physics::getEngine().balls[0].stopped = false;
+
+	Physics::getEngine().balls[1].velocity = glm::vec3(10, 30, 0);
+	Physics::getEngine().balls[1].stopped = false;
 }
 
 void CameraControlsBar::updateCamPosition()

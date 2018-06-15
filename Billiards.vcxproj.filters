@@ -71,6 +71,9 @@
     <ClCompile Include="src\EventManager.cpp">
       <Filter>source files</Filter>
     </ClCompile>
+    <ClCompile Include="src\Primitives.cpp">
+      <Filter>source files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="src\Billiards.rc">

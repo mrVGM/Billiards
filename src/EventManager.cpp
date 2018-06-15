@@ -52,20 +52,6 @@ Event * EventManager::nextEvent()
 
 	Physics & p = Physics::getEngine();
 
-	bool allStopped = true;
-
-	for (int i = 0; i < p.balls.size(); ++i)
-	{
-		if (!p.balls[i].stopped) 
-		{
-			allStopped = false;
-			break;
-		}
-	}
-
-	if (allStopped)
-		return new EventInstances::EndFrame();
-
 	std::vector<Event *> events;
 
 	float earliest = RenderWindow::waitingTime / 1000.0f + 1.0f;
@@ -104,6 +90,9 @@ Event * EventManager::nextEvent(Ball & ball)
 {
 	Physics & p = Physics::getEngine();
 	Ball & curBall = ball;
+
+	if (curBall.stopped)
+		return NULL;
 
 	if (Utils::length(curBall.velocity) == 0.0f)
 	{

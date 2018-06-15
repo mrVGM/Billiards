@@ -199,7 +199,13 @@ void Renderer::setUniforms()
 {
 	int BALL = glGetUniformLocation(glProgram, "BALL");
 
-	glUniform3f(BALL, Physics::getEngine().balls[0].position.x, Physics::getEngine().balls[0].position.y, Physics::getEngine().balls[0].position.z);
+	const float balls[] =
+	{
+		Physics::getEngine().balls[0].position.x, Physics::getEngine().balls[0].position.y, Physics::getEngine().balls[0].position.z,
+		Physics::getEngine().balls[1].position.x, Physics::getEngine().balls[1].position.y, Physics::getEngine().balls[1].position.z,
+	};
+
+	glUniform3fv(BALL, 2, balls);
 
 	if (!changed)
 		return;

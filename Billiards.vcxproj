@@ -220,6 +220,7 @@ COPY $(SolutionDir)src\ball.obj $(SolutionDir)final\res\ball.obj</Command>
     <ClCompile Include="src\EventManager.cpp" />
     <ClCompile Include="src\MainWindow.cpp" />
     <ClCompile Include="src\Physics.cpp" />
+    <ClCompile Include="src\Primitives.cpp" />
     <ClCompile Include="src\Renderer.cpp" />
     <ClCompile Include="src\RenderWindow.cpp" />
     <ClCompile Include="src\Utils.cpp" />
