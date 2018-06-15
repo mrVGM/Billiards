@@ -21,5 +21,6 @@ public:
 	void handle(EventInstances::BallStopped * e);
 	void handle(EventInstances::BoardBounce * e);
 	void handle(EventInstances::EndFrame * e);
+	void handle(EventInstances::BallCollision * e);
 };
 

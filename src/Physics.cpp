@@ -65,3 +65,34 @@ void Physics::move(float t)
 		Physics::getEngine().balls[i].position += dist * Physics::getEngine().balls[i].direction;
 	}
 }
+
+void Physics::handle(EventInstances::BallCollision * e)
+{
+	double t = RenderWindow::waitingTime / 1000.0 - Physics::time;
+	move(t);
+	
+	Ball * primary = e->ball1;
+	Ball * secondary = e->ball2;
+	if (e->ball2->speed > primary->speed)
+	{
+		primary = e->ball2;
+		secondary = e->ball1;
+	}
+
+	glm::vec3 line = glm::normalize(secondary->position - primary->position);
+	
+	float coef = glm::dot(primary->direction, line);
+
+	glm::vec3 velocitySec = secondary->speed * secondary->direction;
+	velocitySec += (1 - coef) * primary->speed * line;
+
+	glm::vec3 velocityPrim = coef * primary->speed * primary->direction;
+
+	velocityPrim = (primary->speed * primary->direction + secondary->speed * secondary->direction) - velocityPrim - velocitySec;
+
+	primary->speed = Utils::length(velocityPrim);
+	primary->direction = glm::normalize(velocityPrim);
+
+	secondary->speed = Utils::length(velocitySec);
+	secondary->direction = glm::normalize(velocitySec);
+}

@@ -24,6 +24,10 @@ namespace EventInstances
 		const Utils::Segment * segment;
 	END_DECLARE_EVENT
 
+	BEGIN_DECLARE_EVENT(BallCollision)
+		Ball * ball1;
+		Ball * ball2;
+	END_DECLARE_EVENT
 }
 
 #undef BEGIN_DECLARE_EVENT

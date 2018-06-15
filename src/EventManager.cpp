@@ -109,16 +109,56 @@ Event * EventManager::nextEvent(Ball & ball)
 	const Utils::Segment const * segment;
 	glm::vec3 intersection;
 
+	Event * res = NULL;
+
 	if (boardBounce(curBall.position, offset, segment, intersection))
 	{
 		EventInstances::BoardBounce * bb = new EventInstances::BoardBounce;
 		float distToBounce = Utils::length(intersection - curBall.position);
 		//0.5 * a * t^2 + v0 * t = distToBounce
-		bb->time = Utils::time(distToBounce, curBall.speed, Physics::acceleration);
+		bb->time = Utils::time(distToBounce, curBall.speed, Physics::acceleration) + Physics::getEngine().time;
 		bb->ball = &curBall;
 		bb->segment = segment;
-		return bb;
+		res = bb;
 	}
 
-	return NULL;
+	if (res)
+		t = res->time - Physics::getEngine().time;
+
+	int steps = ceil(t * 1000);
+	for (int i = 0; i <= steps; ++i)
+	{
+		double t1 = i * t / steps;
+
+		for (int j = 0; j < p.balls.size(); ++j)
+		{
+			Ball & otherBall = p.balls[j];
+			if (otherBall.id == curBall.id)
+				continue;
+
+			float curRoute = Utils::route(t1, curBall.speed, Physics::acceleration);
+			float otherRoute = Utils::route(t1, otherBall.speed, Physics::acceleration);
+
+			glm::vec3 curPos = curBall.position + (curRoute * curBall.direction);
+			glm::vec3 otherPos = otherBall.position + (otherRoute * otherBall.direction);
+
+			if (Utils::length(curPos - otherPos) <= Ball::diameter)
+			{
+				glm::vec3 tmp = glm::normalize(otherPos - curPos);
+				if (glm::dot(tmp, curBall.direction) > 0 || glm::dot(-tmp, otherBall.direction) > 0)
+				{
+					EventInstances::BallCollision * bc = new EventInstances::BallCollision;
+					bc->ball1 = &curBall;
+					bc->ball2 = &otherBall;
+					bc->time = t1 + p.time;
+					if (res)
+						delete res;
+					res = bc;
+					break;
+				}
+			}
+		}
+	}
+
+	return res;
 }
