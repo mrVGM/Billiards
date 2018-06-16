@@ -22,34 +22,32 @@ void Physics::updateState()
 {
 	EventManager & em = EventManager::getEventManager();
 	
+	Physics::getEngine().finishedUpdatingState = false;
+	Physics::getEngine().time = 0.0;
+
 	Event * e;
-	bool finished = false;
-	do
+	while (!finishedUpdatingState)
 	{
 		e = em.nextEvent();
-		finished = dynamic_cast<EventInstances::EndFrame *>(e);
+		double t = e->time - Physics::time;
+		move(t);
 		e->handle();
-	} while (!finished);
-	
+		Physics::time = e->time;
+		delete e;
+	}
 }
 
 void Physics::handle(EventInstances::BallStopped * e)
 {
 	e->ball->stopped = true;
-	Physics::time = e->time;
 }
 void Physics::handle(EventInstances::BoardBounce * e)
 {
-	double t = e->time - Physics::time;
-	move(t);
 	e->ball->direction = Utils::reflect(e->ball->direction, e->segment->p2 - e->segment->p1);
-	Physics::time = e->time;
 }
 void Physics::handle(EventInstances::EndFrame * e)
 {
-	double t = RenderWindow::waitingTime / 1000.0 - Physics::time;
-	move(t);
-	Physics::time = 0.0;
+	Physics::getEngine().finishedUpdatingState = true;
 }
 
 void Physics::move(float t)
@@ -96,6 +94,4 @@ void Physics::handle(EventInstances::BallCollision * e)
 		e->ball1->direction = glm::normalize(vel1);
 	if (e->ball2->speed > 0)
 		e->ball2->direction = glm::normalize(vel2);
-
-	Physics::time = e->time;
 }

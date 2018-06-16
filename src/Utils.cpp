@@ -10,7 +10,7 @@ bool Utils::intersects(const glm::vec3 & point, const glm::vec3 & dir, const Uti
 	Vector v1 = segment.p1 - point;
 	Vector v2 = segment.p2 - point;
 
-	if (glm::cross(v1, v2) == Vector(0, 0, 0))
+	if (Utils::length(glm::cross(v1, v2)) < FLT_EPSILON)
 	{
 		intersection = point;
 		lies = true;

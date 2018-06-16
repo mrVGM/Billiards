@@ -67,7 +67,11 @@ Event * EventManager::nextEvent()
 	}
 
 	if (events.empty())
-		return new EventInstances::EndFrame();
+	{
+		EventInstances::EndFrame * ef = new EventInstances::EndFrame;
+		ef->time = RenderWindow::waitingTime / 1000.0;
+		return ef;
+	}
 
 	for (int i = 0; i < events.size(); ++i)
 	{
@@ -103,6 +107,9 @@ Event * EventManager::nextEvent(int index)
 	}
 
 	double t = RenderWindow::waitingTime / 1000.0 - p.time;
+
+	if (t < FLT_EPSILON)
+		return NULL;
 
 	glm::vec3 offset = Utils::route(t, curBall.speed, Physics::acceleration) * curBall.direction;
 
