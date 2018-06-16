@@ -68,31 +68,34 @@ void Physics::move(float t)
 
 void Physics::handle(EventInstances::BallCollision * e)
 {
-	double t = RenderWindow::waitingTime / 1000.0 - Physics::time;
-	move(t);
-	
-	Ball * primary = e->ball1;
-	Ball * secondary = e->ball2;
-	if (e->ball2->speed > primary->speed)
-	{
-		primary = e->ball2;
-		secondary = e->ball1;
-	}
+	glm::vec3 normal = e->ball2->position - e->ball1->position;
+	normal = glm::normalize(normal);
+	glm::vec3 tangent = glm::cross(glm::vec3(0, 0, 1), normal);
+	tangent = glm::normalize(tangent);
 
-	glm::vec3 line = glm::normalize(secondary->position - primary->position);
-	
-	float coef = glm::dot(primary->direction, line);
+	glm::mat3 mat(tangent, normal, glm::vec3(0, 0, 1));
+	glm::mat3 matInv = glm::inverse(mat);
 
-	glm::vec3 velocitySec = secondary->speed * secondary->direction;
-	velocitySec += (1 - coef) * primary->speed * line;
+	glm::vec3 vel1 = e->ball1->speed * e->ball1->direction;
+	glm::vec3 vel2 = e->ball2->speed * e->ball2->direction;
 
-	glm::vec3 velocityPrim = coef * primary->speed * primary->direction;
+	vel1 = matInv * vel1;
+	vel2 = matInv * vel2;
 
-	velocityPrim = (primary->speed * primary->direction + secondary->speed * secondary->direction) - velocityPrim - velocitySec;
+	float tmp = vel1.y;
+	vel1.y = vel2.y;
+	vel2.y = tmp;
 
-	primary->speed = Utils::length(velocityPrim);
-	primary->direction = glm::normalize(velocityPrim);
+	vel1 = mat * vel1;
+	vel2 = mat * vel2;
 
-	secondary->speed = Utils::length(velocitySec);
-	secondary->direction = glm::normalize(velocitySec);
+	e->ball1->speed = Utils::length(vel1);
+	e->ball2->speed = Utils::length(vel2);
+
+	if (e->ball1->speed > 0)
+		e->ball1->direction = glm::normalize(vel1);
+	if (e->ball2->speed > 0)
+		e->ball2->direction = glm::normalize(vel2);
+
+	Physics::time = e->time;
 }

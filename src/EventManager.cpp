@@ -57,7 +57,7 @@ Event * EventManager::nextEvent()
 	float earliest = RenderWindow::waitingTime / 1000.0f + 1.0f;
 	for (int i = 0; i < p.balls.size(); ++i)
 	{
-		Event * cur = nextEvent(p.balls[i]);
+		Event * cur = nextEvent(i);
 		if (cur)
 		{
 			events.push_back(cur);
@@ -86,10 +86,10 @@ EventManager & EventManager::getEventManager()
 	return em;
 }
 
-Event * EventManager::nextEvent(Ball & ball)
+Event * EventManager::nextEvent(int index)
 {
 	Physics & p = Physics::getEngine();
-	Ball & curBall = ball;
+	Ball & curBall = p.balls[index];
 
 	if (curBall.stopped)
 		return NULL;
@@ -130,7 +130,7 @@ Event * EventManager::nextEvent(Ball & ball)
 	{
 		double t1 = i * t / steps;
 
-		for (int j = 0; j < p.balls.size(); ++j)
+		for (int j = index+1; j < p.balls.size(); ++j)
 		{
 			Ball & otherBall = p.balls[j];
 			if (otherBall.id == curBall.id)

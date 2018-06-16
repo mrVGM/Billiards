@@ -18,7 +18,7 @@ public:
 class EventManager
 {
 private:
-	Event * nextEvent(Ball & ball);
+	Event * nextEvent(int index);
 public:
 	std::queue<Event *> eventQueue;
 	Event * nextEvent();
