@@ -13,6 +13,10 @@ const Utils::Segment Physics::s2(glm::vec3(88.9 - 5.25 / 2.0, -178.45 + 5.25 / 2
 const Utils::Segment Physics::s3(glm::vec3(88.9 + 5.25 / 2.0, 178.45 - 5.25 / 2.0, 0), glm::vec3(-88.9 - 5.25 / 2.0, 178.45 - 5.25 / 2.0, 0));
 const Utils::Segment Physics::s4(glm::vec3(-88.9 + 5.25 / 2.0, 178.45 + 5.25 / 2.0, 0), glm::vec3(-88.9 + 5.25 / 2.0, -178.45 - 5.25 / 2.0, 0));
 
+Physics::Physics() : ball1Id(-1), ball2Id(-1)
+{
+}
+
 Physics & Physics::getEngine()
 {
 	return pe;
@@ -100,4 +104,8 @@ void Physics::handle(EventInstances::BallCollision * e)
 		e->ball2->direction = glm::normalize(vel2);
 		e->ball2->stopped = false;
 	}
+
+	lastCollisionTime = e->time;
+	ball1Id = e->ball1->id;
+	ball2Id = e->ball2->id;
 }

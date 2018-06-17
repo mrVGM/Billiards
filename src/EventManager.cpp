@@ -69,8 +69,16 @@ static EventInstances::BallCollision * testForCollisions(double t)
 				if (Utils::length(curPos - otherPos) <= Ball::diameter)
 				{
 					glm::vec3 tmp = glm::normalize(otherPos - curPos);
-					if (glm::dot(tmp, curBall.speed * curBall.direction) > 0 || glm::dot(-tmp, otherBall.speed * otherBall.direction) > 0)
+
+					if (glm::dot(tmp, curBall.speed * curBall.direction) > FLT_EPSILON || glm::dot(-tmp, otherBall.speed * otherBall.direction) > FLT_EPSILON)
 					{
+						if (p.ball1Id == curBall.id && p.ball2Id == otherBall.id && p.lastCollisionTime == t1 + p.time)
+						{
+							p.ball1Id = -1;
+							p.ball2Id = -1;
+							return NULL;
+						}
+
 						EventInstances::BallCollision * bc = new EventInstances::BallCollision;
 						bc->ball1 = &curBall;
 						bc->ball2 = &otherBall;

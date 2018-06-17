@@ -12,7 +12,14 @@ public:
 	std::vector<Ball> balls;
 	static const Utils::Segment s1, s2, s3, s4;
 
+	double lastCollisionTime;
+	int ball1Id;
+	int ball2Id;
+
 	bool finishedUpdatingState;
+
+	Physics();
+
 	void updateState();
 	static Physics & getEngine();
 	static float acceleration;
