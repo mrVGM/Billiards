@@ -7,9 +7,8 @@
 
 class MainWindow : public CFrameWnd
 {
-private:
-	CameraControlsBar cameraControlsBar;
 public:
+	CameraControlsBar cameraControlsBar;
 	RenderWindow renderWindow;
 	void initControls();
 };

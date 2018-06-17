@@ -30,6 +30,8 @@ void RenderWindow::startRendering()
 
 	Physics::getEngine().time = 0.0;
 
+	App::getApp().mainWindow->cameraControlsBar.updateCamPosition();
+
 	renderThread = new std::thread(worker);
 }
 

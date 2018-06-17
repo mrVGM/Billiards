@@ -17,7 +17,7 @@ END_MESSAGE_MAP()
 
 CameraControlsBar::CameraControlsBar() : changed(false)
 {
-	dist = sqrt(3 * 100);
+	dist = 200.0f;
 	parallel = 75;
 	meridian = 87;
 }

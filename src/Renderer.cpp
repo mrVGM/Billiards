@@ -22,8 +22,6 @@ Renderer::Renderer()
 	readFile(vertexShaderPath.c_str(), vertexShader);
 	readFile(fragmentShaderPath.c_str(), fragmentShader);
 	readFile(geometryShaderPath.c_str(), geometryShader);
-	
-	setCamPosition(glm::vec3(-10, -10, 10));
 }
 
 void Renderer::readFile(const char * fileName, std::string & dest)
