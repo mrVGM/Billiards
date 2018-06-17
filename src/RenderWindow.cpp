@@ -3,6 +3,7 @@
 #include "RenderWindow.h"
 #include "GL/glew.h"
 #include "Physics.h"
+#include <gtc/constants.hpp>
 
 const int RenderWindow::waitingTime = 25;
 
@@ -28,7 +29,11 @@ void RenderWindow::startRendering()
 
 	Physics::getEngine().balls[0].position = glm::vec3(0, 0, 0);
 	Physics::getEngine().balls[1].position = glm::vec3(0, 30, 0);
-	Physics::getEngine().balls[2].position = glm::vec3(0, 60, 0);
+
+	float angle = glm::pi<float>() / 6.0f;
+	glm::vec3 p1(sin(angle), cos(angle), 0);
+
+	Physics::getEngine().balls[2].position = Physics::getEngine().balls[1].position + Ball::diameter * p1;
 
 	Physics::getEngine().time = 0.0;
 
