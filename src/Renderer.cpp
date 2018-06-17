@@ -205,7 +205,7 @@ void Renderer::setUniforms()
 		balls[3 * i + 2] = Physics::getEngine().balls[i].position.z;
 	}
 
-	glUniform3fv(BALL, 3, balls);
+	glUniform3fv(BALL, 5, balls);
 
 	delete[] balls;
 

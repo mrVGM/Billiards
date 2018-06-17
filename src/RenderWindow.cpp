@@ -26,6 +26,8 @@ void RenderWindow::startRendering()
 	Physics::getEngine().balls.push_back(Ball());
 	Physics::getEngine().balls.push_back(Ball());
 	Physics::getEngine().balls.push_back(Ball());
+	Physics::getEngine().balls.push_back(Ball());
+	Physics::getEngine().balls.push_back(Ball());
 
 	Physics::getEngine().balls[0].position = glm::vec3(0, 0, 0);
 	Physics::getEngine().balls[1].position = glm::vec3(0, 30, 0);
@@ -34,6 +36,11 @@ void RenderWindow::startRendering()
 	glm::vec3 p1(sin(angle), cos(angle), 0);
 
 	Physics::getEngine().balls[2].position = Physics::getEngine().balls[1].position + Ball::diameter * p1;
+
+	p1.x = -p1.x;
+	Physics::getEngine().balls[3].position = Physics::getEngine().balls[1].position + Ball::diameter * p1;
+
+	Physics::getEngine().balls[4].position = Physics::getEngine().balls[2].position + Ball::diameter * glm::normalize(glm::vec3(-0.2,1,0));
 
 	Physics::getEngine().time = 0.0;
 
