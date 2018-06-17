@@ -41,6 +41,50 @@ static bool boardBounce(const glm::vec3 & position, const glm::vec3 & offset, co
 	return true;
 }
 
+static EventInstances::BallCollision * testForCollisions(double t)
+{
+	Physics & p = Physics::getEngine();
+
+	for (int index = 0; index < p.balls.size(); ++index)
+	{
+		Ball & curBall = p.balls[index];
+
+		int steps = ceil(t * 1000);
+		for (int i = 0; i <= steps; ++i)
+		{
+			double t1 = i * t / steps;
+
+			for (int j = index + 1; j < p.balls.size(); ++j)
+			{
+				Ball & otherBall = p.balls[j];
+				if (otherBall.id == curBall.id)
+					continue;
+
+				float curRoute = Utils::route(t1, curBall.speed, Physics::acceleration);
+				float otherRoute = Utils::route(t1, otherBall.speed, Physics::acceleration);
+
+				glm::vec3 curPos = curBall.position + (curRoute * curBall.direction);
+				glm::vec3 otherPos = otherBall.position + (otherRoute * otherBall.direction);
+
+				if (Utils::length(curPos - otherPos) <= Ball::diameter)
+				{
+					glm::vec3 tmp = glm::normalize(otherPos - curPos);
+					if (glm::dot(tmp, curBall.speed * curBall.direction) > 0 || glm::dot(-tmp, otherBall.speed * otherBall.direction) > 0)
+					{
+						EventInstances::BallCollision * bc = new EventInstances::BallCollision;
+						bc->ball1 = &curBall;
+						bc->ball2 = &otherBall;
+						bc->time = t1 + p.time;
+
+						return bc;
+					}
+				}
+			}
+		}
+	}
+	return NULL;
+}
+
 Event * EventManager::nextEvent()
 {
 	if (!eventQueue.empty())
@@ -64,6 +108,14 @@ Event * EventManager::nextEvent()
 			if (cur->time < earliest)
 				earliest = cur->time;
 		}
+	}
+
+	double t = events.empty() ? RenderWindow::waitingTime / 1000.0 - p.time : earliest - p.time;
+	EventInstances::BallCollision * bc = testForCollisions(t);
+	if (bc)
+	{
+		events.push_back(bc);
+		earliest = bc->time;
 	}
 
 	if (events.empty())
@@ -95,6 +147,8 @@ Event * EventManager::nextEvent(int index)
 	Physics & p = Physics::getEngine();
 	Ball & curBall = p.balls[index];
 
+	double t = RenderWindow::waitingTime / 1000.0 - p.time;
+
 	if (curBall.stopped)
 		return NULL;
 
@@ -106,8 +160,6 @@ Event * EventManager::nextEvent(int index)
 		return ballStopped;
 	}
 
-	double t = RenderWindow::waitingTime / 1000.0 - p.time;
-
 	if (t < FLT_EPSILON)
 		return NULL;
 
@@ -115,8 +167,6 @@ Event * EventManager::nextEvent(int index)
 
 	const Utils::Segment const * segment;
 	glm::vec3 intersection;
-
-	Event * res = NULL;
 
 	if (boardBounce(curBall.position, offset, segment, intersection))
 	{
@@ -126,46 +176,8 @@ Event * EventManager::nextEvent(int index)
 		bb->time = Utils::time(distToBounce, curBall.speed, Physics::acceleration) + Physics::getEngine().time;
 		bb->ball = &curBall;
 		bb->segment = segment;
-		res = bb;
+		return bb;
 	}
 
-	if (res)
-		t = res->time - Physics::getEngine().time;
-
-	int steps = ceil(t * 1000);
-	for (int i = 0; i <= steps; ++i)
-	{
-		double t1 = i * t / steps;
-
-		for (int j = index+1; j < p.balls.size(); ++j)
-		{
-			Ball & otherBall = p.balls[j];
-			if (otherBall.id == curBall.id)
-				continue;
-
-			float curRoute = Utils::route(t1, curBall.speed, Physics::acceleration);
-			float otherRoute = Utils::route(t1, otherBall.speed, Physics::acceleration);
-
-			glm::vec3 curPos = curBall.position + (curRoute * curBall.direction);
-			glm::vec3 otherPos = otherBall.position + (otherRoute * otherBall.direction);
-
-			if (Utils::length(curPos - otherPos) <= Ball::diameter)
-			{
-				glm::vec3 tmp = glm::normalize(otherPos - curPos);
-				if (glm::dot(tmp, curBall.direction) > 0 || glm::dot(-tmp, otherBall.direction) > 0)
-				{
-					EventInstances::BallCollision * bc = new EventInstances::BallCollision;
-					bc->ball1 = &curBall;
-					bc->ball2 = &otherBall;
-					bc->time = t1 + p.time;
-					if (res)
-						delete res;
-					res = bc;
-					break;
-				}
-			}
-		}
-	}
-
-	return res;
+	return NULL;
 }

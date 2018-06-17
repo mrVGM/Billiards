@@ -91,7 +91,13 @@ void Physics::handle(EventInstances::BallCollision * e)
 	e->ball2->speed = Utils::length(vel2);
 
 	if (e->ball1->speed > 0)
+	{
 		e->ball1->direction = glm::normalize(vel1);
+		e->ball1->stopped = false;
+	}
 	if (e->ball2->speed > 0)
+	{
 		e->ball2->direction = glm::normalize(vel2);
+		e->ball2->stopped = false;
+	}
 }
