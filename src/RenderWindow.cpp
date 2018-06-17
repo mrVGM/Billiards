@@ -24,9 +24,11 @@ void RenderWindow::startRendering()
 
 	Physics::getEngine().balls.push_back(Ball());
 	Physics::getEngine().balls.push_back(Ball());
+	Physics::getEngine().balls.push_back(Ball());
 
 	Physics::getEngine().balls[0].position = glm::vec3(0, 0, 0);
 	Physics::getEngine().balls[1].position = glm::vec3(0, 30, 0);
+	Physics::getEngine().balls[2].position = glm::vec3(0, 60, 0);
 
 	Physics::getEngine().time = 0.0;
 

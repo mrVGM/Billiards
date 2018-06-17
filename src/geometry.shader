@@ -1,7 +1,7 @@
 #version 330 core
 
 layout(triangles) in;
-layout(triangle_strip, max_vertices = 6) out;
+layout(triangle_strip, max_vertices = 9) out;
 
 uniform vec3 CAM;
 uniform mat3 TR;
@@ -88,6 +88,7 @@ void main()
 	{
 		ball(p0, p1, p2, n[0], n[1], n[2], BALL[0]);
 		ball(p0, p1, p2, n[0], n[1], n[2], BALL[1]);
+		ball(p0, p1, p2, n[0], n[1], n[2], BALL[2]);
 	}
 
 }
